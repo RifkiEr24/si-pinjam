@@ -1,7 +1,9 @@
 <template>
   <div class="container">
-    <div class="flex flex-col lg:flex-row  gap-4 w-full justify-between items-center p-4">
-      <div class="flex flex-col lg:flex-row  gap-4 w-full">
+    <div
+      class="flex flex-col lg:flex-row gap-4 w-full justify-between items-center p-4"
+    >
+      <div class="flex flex-col lg:flex-row gap-4 w-full">
         <!-- Filters -->
         <input
           type="number"
@@ -32,19 +34,17 @@
         </select>
       </div>
     </div>
-    <div class="min-h-[664px]" v-if="paginatedLoans.length"    >
-      <div
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-4"
-      >
+    <div class="min-h-[664px]" v-if="paginatedLoans.length">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-4">
         <loan-item v-for="loan in paginatedLoans" :key="loan.id" :loan="loan" />
       </div>
-   
     </div>
-    <div v-if="!paginatedLoans.length" class="min-h-[75vh] flex flex-col gap-8 items-center justify-center">
-        <NotFound/>
-      <p class="text-center text-3xl font-medium ">
-        No loans found.
-      </p>
+    <div
+      v-if="!paginatedLoans.length"
+      class="min-h-[75vh] flex flex-col gap-8 items-center justify-center"
+    >
+      <NotFound />
+      <p class="text-center text-3xl font-medium">No loans found.</p>
     </div>
 
     <pagination
@@ -90,6 +90,7 @@ onMounted(() => {
   handleGetData();
 });
 
+//Filtered Loan
 const filteredLoans = computed(() => {
   return loans.value.filter((loan) => {
     const matchesAmount = filters.value.amount
@@ -105,6 +106,8 @@ const filteredLoans = computed(() => {
   });
 });
 
+// Sorting
+
 const sortedLoans = computed(() => {
   return filteredLoans.value.slice().sort((a, b) => {
     if (sortOption.value === "amount") {
@@ -119,16 +122,17 @@ const sortedLoans = computed(() => {
   });
 });
 
+// Pagination
 const paginatedLoans = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
   const end = start + itemsPerPage.value;
   return sortedLoans.value.slice(start, end);
 });
 
+// Reset to page 1 every filter
 watch(filters, () => {
-  currentPage.value = 1; 
+  currentPage.value = 1;
 });
-;
 </script>
   
   <style lang="scss" scoped>

@@ -1,5 +1,8 @@
 <template>
-  <div class="flex flex-col container gap-6 p-4" v-if="Object.keys(loan).length">
+  <div
+    class="flex flex-col container gap-6 p-4"
+    v-if="Object.keys(loan).length"
+  >
     <div class="p-8 bg-white rounded-xl shadow-md">
       <h1 class="text-3xl font-bold mb-6 text-center">Loan Details</h1>
       <div class="mb-6">
@@ -61,46 +64,48 @@
       </div>
       <div class="p-8 bg-white rounded-xl shadow-md flex-grow-[1]">
         <h2 class="text-2xl font-semibold mb-4">Documents</h2>
-      <ul class="list-disc list-inside">
-        <li
-          v-for="document in loan.documents"
-          :key="document.type"
-          class="mb-2"
-        >
-          <strong>{{ document.type }}:</strong>
-          <img :src="baseAPIURL + document.url" alt="">
-          <!-- <a
+        <ul class="list-disc list-inside">
+          <li
+            v-for="document in loan.documents"
+            :key="document.type"
+            class="mb-2"
+          >
+            <strong>{{ document.type }}:</strong>
+            <img :src="baseAPIURL + document.url" alt="" />
+            <!-- <a
             :href="document.url"
             target="_blank"
             class="text-blue-500 underline"
             >{{ document.url }}</a
           > -->
-        </li>
-      </ul>
-    </div>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <div class="p-8 bg-white rounded-xl shadow-md flex-grow-[1]">
-        <h2 class="text-2xl font-semibold mb-4 bg">Repayment Schedule</h2>
+      <h2 class="text-2xl font-semibold mb-4 bg">Repayment Schedule</h2>
       <ul class="list-disc list-inside">
         <table class="w-full">
-            <thead>
-                <tr>
-                    <th>Due Date</th>
-                    <th>Amount Due</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="text-center" v-for="installment in loan.repaymentSchedule.installments" :key="installment.dueDate">
-                    <td>{{ installment.dueDate }}</td>
-                    <td>${{ installment.amountDue.toLocaleString() }}</td>
-                </tr>
-            </tbody>
+          <thead>
+            <tr>
+              <th>Due Date</th>
+              <th>Amount Due</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              class="text-center"
+              v-for="installment in loan.repaymentSchedule.installments"
+              :key="installment.dueDate"
+            >
+              <td>{{ installment.dueDate }}</td>
+              <td>${{ installment.amountDue.toLocaleString() }}</td>
+            </tr>
+          </tbody>
         </table>
       </ul>
     </div>
-
- 
   </div>
 </template>
   
@@ -118,7 +123,7 @@ const { loans } = storeToRefs(loanStore);
 const route = useRoute();
 const loan = ref({});
 
-const baseAPIURL = ref(import.meta.env.VITE_API_URL)
+const baseAPIURL = ref(import.meta.env.VITE_API_URL);
 
 const scoreData = {
   labels: ["Score ", "-"],
@@ -131,6 +136,7 @@ const scoreData = {
 };
 
 onMounted(() => {
+  // Search for the loan with the given ID
   loan.value = loans.value.find((loan) => loan.id === route.params.id);
   scoreData.datasets[0].data.push(loan.value.borrower.creditScore);
   scoreData.datasets[0].data.push(1000 - loan.value.borrower.creditScore);
